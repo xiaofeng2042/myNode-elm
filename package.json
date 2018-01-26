@@ -11,12 +11,19 @@
     "config-lite": "^2.1.0",
     "connect-mongo": "^2.0.1",
     "cookie-parser": "~1.4.3",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "express": "~4.15.5",
     "express-session": "^1.15.6",
+    "formidable": "^1.1.1",
+    "fs": "^0.0.1-security",
+    "gm": "^1.23.1",
     "jade": "~1.11.0",
     "mongoose": "^5.0.1",
     "morgan": "~1.9.0",
-    "serve-favicon": "~2.4.5"
+    "node-fetch": "^1.7.3",
+    "qiniu": "^7.1.2",
+    "serve-favicon": "~2.4.5",
+    "time-formater": "^1.0.1"
   }
 }
