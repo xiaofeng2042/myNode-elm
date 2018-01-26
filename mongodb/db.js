@@ -1,7 +1,10 @@
-var mongoose = requre('mongoose');
-var config = requre('config-lite');
-var chalk = requre('chalk');
-mongoose.connect(config.url, {useMongoClient:true});
+'use strict';
+
+var mongoose = require('mongoose');
+var config = require('config-lite')(__dirname);
+var chalk = require('chalk');
+mongoose.connect(config.url);
+
 mongoose.Promise = global.Promise;
 
 const db = mongoose.connection;
@@ -26,4 +29,6 @@ db.on('close', function() {
     mongoose.connect(config.url, {server:{auto_reconnect:true}});
 });
 
-module.exports =  db;
+
+module.exports = db;
+
