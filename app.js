@@ -1,4 +1,6 @@
 var express = require('express');
+var db = require('./mongodb/db');
+var config = require('config-lite')(__dirname);
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
