@@ -4,11 +4,44 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser')
+var session = require('express-session');
+var config = require('config-lite');
+var db = require('./mongodb/db.js');
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+app.all('*', (req, res, next) => {
+	res.header("Access-Control-Allow-Origin", req.headers.origin || '*');
+	res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With");
+	res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+  	res.header("Access-Control-Allow-Credentials", true); //可以带cookies
+	res.header("X-Powered-By", '3.2.1')
+	if (req.method == 'OPTIONS') {
+	  	res.send(200);
+	} else {
+	    next();
+	}
+});
+
+// app.use(Statistic.apiRecord)
+const MongoStore = connectMongo(session);
+app.use(cookieParser());
+app.use(session({
+	  name: config.session.name,
+		secret: config.session.secret,
+		resave: true,
+		saveUninitialized: false,
+		cookie: config.session.cookie,
+		store: new MongoStore({
+	  url: config.url
+	})
+}))
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
