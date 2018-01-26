@@ -1,5 +1,3 @@
-'use strict';
-
 var mongoose = requre('mongoose');
 var config = requre('config-lite');
 var chalk = requre('chalk');
@@ -28,4 +26,4 @@ db.on('close', function() {
     mongoose.connect(config.url, {server:{auto_reconnect:true}});
 });
 
-export default db;
+module.exports =  db;
