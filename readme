@@ -8,6 +8,21 @@
 4、数据库已经连接成功
 5、路由功能添加成功
 
-遇到待解决的问题：
-1、pm2 如何查看错误日志呢？
-pm2 logs [app-name]
+
+-----
+
+yaml 文件添加 
+mynode_elm:
+  image: daocloud.io/yzq627/mynode_elm:master-a91c734
+  links:
+  - mongodb:mongodb
+  ports:
+  - 32776:3000
+  restart: always
+mongodb:
+  image: mongo
+  restart: always
+
+ ---
+
+ 
