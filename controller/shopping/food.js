@@ -1,4 +1,7 @@
-var {Food as FoodModel, Menu as MenuModel} = require('../../models/shopping/food')
+var food = require('../../models/shopping/food')
+var FoodModel = food.Food
+var MenuModel = food.Menu
+
 var ShopModel = require('../../models/shopping/shop')
 var BaseComponent = require('../../prototype/baseComponent')
 var formidable = require('formidable')

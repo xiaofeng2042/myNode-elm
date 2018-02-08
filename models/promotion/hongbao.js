@@ -1,5 +1,5 @@
 var mongoose = require('mongoose')
-var hongbaoDate = require('../../InitData/hongbao')
+var hongbaoData = require('../../InitData/hongbao')
 
 const Schema = mongoose.Schema;
 
