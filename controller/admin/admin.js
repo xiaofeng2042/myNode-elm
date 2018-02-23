@@ -4,10 +4,10 @@ var crypto = require('crypto');
 var formidable = require('formidable');
 var dtime = require('time-formater');
 
-class Admin extends AddressComponent{
+class Admin extends AddressComponent {
 	constructor(){
 		super()
-		this.login = this.login.bind(this);
+		this.login = this.login.bind(this)
 		this.register = this.register.bind(this)
 		this.encryption = this.encryption.bind(this)
 		this.updateAvatar = this.updateAvatar.bind(this)
@@ -15,7 +15,7 @@ class Admin extends AddressComponent{
 	async login(req, res, next){
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
-			if (err){
+			if (err) {
 				res.send({
 					status: 0,
 					type: 'FORM_DATA_ERROR',
@@ -30,7 +30,7 @@ class Admin extends AddressComponent{
 				}else if(!password){
 					throw new Error('密码参数错误')
 				}
-			}catch(err) {
+			}catch(err){
 				console.log(err.message, err);
 				res.send({
 					status: 0,
@@ -39,16 +39,16 @@ class Admin extends AddressComponent{
 				})
 				return
 			}
-			const newpassword = this.enryption(password);
+			const newpassword = this.encryption(password);
 			try{
 				const admin = await AdminModel.findOne({user_name})
-				if(!admin){
-					const adminTip = status == 1 ? '管理员':'超级管理员'
-					const admin_id = await this.getId('admin_id')
+				if (!admin) {
+					const adminTip = status == 1 ? '管理员' : '超级管理员'
+					const admin_id = await this.getId('admin_id');
 					const cityInfo = await this.guessPosition(req);
 					const newAdmin = {
-						user_name,
-						password: newpassword,
+						user_name, 
+						password: newpassword, 
 						id: admin_id,
 						create_time: dtime().format('YYYY-MM-DD HH:mm'),
 						admin: adminTip,
@@ -66,9 +66,9 @@ class Admin extends AddressComponent{
 					res.send({
 						status: 0,
 						type: 'ERROR_PASSWORD',
-						message: '该用户已存在, 密码输入错误',
+						message: '该用户已存在，密码输入错误',
 					})
-				}else {
+				}else{
 					req.session.admin_id = admin.id;
 					res.send({
 						status: 1,
@@ -76,11 +76,11 @@ class Admin extends AddressComponent{
 					})
 				}
 			}catch(err){
-				console.log('登录管理员失败',err);
-				req.send({
+				console.log('登录管理员失败', err);
+				res.send({
 					status: 0,
 					type: 'LOGIN_ADMIN_FAILED',
-					message: '登录管理员失败'
+					message: '登录管理员失败',
 				})
 			}
 		})
@@ -88,7 +88,7 @@ class Admin extends AddressComponent{
 	async register(req, res, next){
 		const form = new formidable.IncomingForm();
 		form.parse(req, async (err, fields, files) => {
-			if(err){
+			if (err) {
 				res.send({
 					status: 0,
 					type: 'FORM_DATA_ERROR',
@@ -98,7 +98,7 @@ class Admin extends AddressComponent{
 			}
 			const {user_name, password, status = 1} = fields;
 			try{
-				if(!user_name){
+				if (!user_name) {
 					throw new Error('用户名错误')
 				}else if(!password){
 					throw new Error('密码错误')
@@ -114,7 +114,7 @@ class Admin extends AddressComponent{
 			}
 			try{
 				const admin = await AdminModel.findOne({user_name})
-				if (admin){
+				if (admin) {
 					console.log('该用户已经存在');
 					res.send({
 						status: 0,
@@ -122,12 +122,12 @@ class Admin extends AddressComponent{
 						message: '该用户已经存在',
 					})
 				}else{
-					const adminTip = status == 1 ? '管理员':'超级管理员'
+					const adminTip = status == 1 ? '管理员' : '超级管理员'
 					const admin_id = await this.getId('admin_id');
 					const newpassword = this.encryption(password);
 					const newAdmin = {
-						user_name,
-						password: newpassword,
+						user_name, 
+						password: newpassword, 
 						id: admin_id,
 						create_time: dtime().format('YYYY-MM-DD'),
 						admin: adminTip,
@@ -155,7 +155,7 @@ class Admin extends AddressComponent{
 		return newpassword
 	}
 	Md5(password){
-		const md5 = crypto.createHash('md5')
+		const md5 = crypto.createHash('md5');
 		return md5.update(password).digest('base64');
 	}
 	async singout(req, res, next){
@@ -166,7 +166,7 @@ class Admin extends AddressComponent{
 				success: '退出成功'
 			})
 		}catch(err){
-			console.log('退出失败', err);
+			console.log('退出失败', err)
 			res.send({
 				status: 0,
 				message: '退出失败'
@@ -198,28 +198,28 @@ class Admin extends AddressComponent{
 				count,
 			})
 		}catch(err){
-			console.log('获取管理员数量失败',err);
+			console.log('获取管理员数量失败', err);
 			res.send({
 				status: 0,
 				type: 'ERROR_GET_ADMIN_COUNT',
-				message:'获取管理员数量失败'
+				message: '获取管理员数量失败'
 			})
 		}
 	}
 	async getAdminInfo(req, res, next){
 		const admin_id = req.session.admin_id;
-		if (!admin_id || !Number(admin_id)){
+		if (!admin_id || !Number(admin_id)) {
 			console.log('获取管理员信息的session失效');
 			res.send({
 				status: 0,
 				type: 'ERROR_SESSION',
-				message:'获取管理员信息失败'
+				message: '获取管理员信息失败'
 			})
-			return
+			return 
 		}
 		try{
 			const info = await AdminModel.findOne({id: admin_id}, '-_id -__v -password');
-			if(!info){
+			if (!info) {
 				throw new Error('未找到当前管理员')
 			}else{
 				res.send({
@@ -238,14 +238,14 @@ class Admin extends AddressComponent{
 	}
 	async updateAvatar(req, res, next){
 		const admin_id = req.params.admin_id;
-		if (!admin_id || !Number(admin_id)){
-			console.log('admin_id参数错误', admin_id);
+		if (!admin_id || !Number(admin_id)) {
+			console.log('admin_id参数错误', admin_id)
 			res.send({
 				status: 0,
 				type: 'ERROR_ADMINID',
-				message: 'admin_id参数错误'
+				message: 'admin_id参数错误',
 			})
-			return
+			return 
 		}
 
 		try{
